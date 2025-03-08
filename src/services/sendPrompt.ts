@@ -1,5 +1,7 @@
 import axios from "axios";
-const API_KEY = "AIzaSyBU-RUJlqW0JWp_KRz8sy7xid47mpDuVJw"; // Replace with your actual API key
+// const API_KEY = import.meta.env.API_KEY; // Replace with your actual API key
+const API_KEY = import.meta.env.VITE_API_KEY
+console.log(API_KEY);
 const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
 const sendPrompt = async (input: string) => {
   try {
