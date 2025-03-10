@@ -7,3 +7,5 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     return true; // Keeps the response channel open
   }
 });
+
+

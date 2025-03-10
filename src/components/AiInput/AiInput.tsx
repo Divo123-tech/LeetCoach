@@ -36,7 +36,7 @@ const AiInput = ({ chat, setChat, problem, loading, setLoading }: Props) => {
       <button
         className="w-full mt-2 p-2 bg-blue-500 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
         onClick={askAI}
-        disabled={loading}
+        disabled={loading || input.length == 0}
       >
         {loading ? "Loading..." : "Ask LeetCoach"}
       </button>

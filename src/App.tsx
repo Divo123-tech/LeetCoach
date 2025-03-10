@@ -9,7 +9,37 @@ function App() {
   const [error, setError] = useState<boolean>(false);
   const [chat, setChat] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [pageContent, setPageContent] = useState<string>("");
+  const [pageContent] = useState<string>("");
+
+  // const getBodyHTML = (): void => {
+  //   console.log("NIGGER");
+  //   chrome.runtime.sendMessage({ action: "GET_PAGE_CONTENT" }, (response) => {
+  //     console.log("NIGGA");
+  //     if (response?.bodyHTML) {
+  //       const body = response.bodyHTML;
+  //       console.log(body);
+  //       setPageContent(body);
+  //       return;
+  //     }
+  //   });
+  // };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function DOMtoString(className: string) {
+    // Select all div elements with the class 'view-line'
+    const viewLineDivs = document.querySelectorAll(`div.${className}`);
+
+    // Map over each div and extract the text content of all span elements inside it
+    const spansContent = Array.from(viewLineDivs).map((div) => {
+      const spans = div.querySelectorAll("span");
+      const spansArray = Array.from(spans).map(
+        (span) => span.innerText || span.textContent
+      ); // Get the content of each span
+      // const codeArray = spansArray.map((span) => (span ? span[0] : ""));
+      return spansArray[0];
+    });
+
+    return spansContent; // Return the array of spans content
+  }
 
   // Function to send the message to the background script
   const getCurrentUrl = (): void => {
@@ -50,11 +80,28 @@ function App() {
 
   useEffect(() => {
     getCurrentUrl(); // Get the URL when the component mounts
-    chrome.runtime.sendMessage({ type: "GET_PAGE_CONTENT" }, (response) => {
-      if (response?.data) {
-        setPageContent(response.data);
-      }
-    });
+
+    chrome.tabs
+      .query({ active: true, lastFocusedWindow: true })
+      .then(function (tabs) {
+        const activeTab = tabs[0];
+        const activeTabId = activeTab.id;
+        if (activeTabId === undefined) {
+          return;
+        }
+        return chrome.scripting.executeScript({
+          target: { tabId: activeTabId },
+          // injectImmediately: true,  // uncomment this to make it execute straight away, other wise it will wait for document_idle
+          func: DOMtoString,
+          args: ["view-line"], // you can use this to target what element to get the html for
+        });
+      })
+      .then(function (results) {
+        console.log("results", results ? results[0].result?.join("\n") : []);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }, [currentProblem]);
 
   return (
