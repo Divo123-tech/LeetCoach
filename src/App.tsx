@@ -9,6 +9,8 @@ function App() {
   const [error, setError] = useState<boolean>(false);
   const [chat, setChat] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [pageContent, setPageContent] = useState<string>("");
+
   // Function to send the message to the background script
   const getCurrentUrl = (): void => {
     chrome.runtime.sendMessage({ action: "getCurrentTabUrl" }, (response) => {
@@ -48,6 +50,11 @@ function App() {
 
   useEffect(() => {
     getCurrentUrl(); // Get the URL when the component mounts
+    chrome.runtime.sendMessage({ type: "GET_PAGE_CONTENT" }, (response) => {
+      if (response?.data) {
+        setPageContent(response.data);
+      }
+    });
   }, [currentProblem]);
 
   return (
@@ -137,6 +144,12 @@ function App() {
               />
             </>
           )}
+        </div>
+        <div className="p-4">
+          <h1 className="text-xl font-bold">Page Content</h1>
+          <pre className="whitespace-pre-wrap">
+            {pageContent || "No content yet."}
+          </pre>
         </div>
       </div>
     </>

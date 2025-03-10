@@ -8,6 +8,7 @@ export default defineConfig({
       input: {
         popup: "popup.html", // HTML file for popup
         background: "src/background.ts", // TypeScript background script
+        content: "src/content.ts",
       },
       output: {
         dir: "dist", // Output folder for compiled files
