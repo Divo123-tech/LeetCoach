@@ -21,7 +21,6 @@ function App() {
       const spansArray = Array.from(spans).map(
         (span) => span.innerText || span.textContent
       ); // Get the content of each span
-      // const codeArray = spansArray.map((span) => (span ? span[0] : ""));
       return spansArray[0];
     });
 
