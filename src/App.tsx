@@ -9,22 +9,9 @@ function App() {
   const [error, setError] = useState<boolean>(false);
   const [chat, setChat] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [pageContent] = useState<string>("");
-
-  // const getBodyHTML = (): void => {
-  //   console.log("NIGGER");
-  //   chrome.runtime.sendMessage({ action: "GET_PAGE_CONTENT" }, (response) => {
-  //     console.log("NIGGA");
-  //     if (response?.bodyHTML) {
-  //       const body = response.bodyHTML;
-  //       console.log(body);
-  //       setPageContent(body);
-  //       return;
-  //     }
-  //   });
-  // };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function DOMtoString(className: string) {
+  const [userCode, setUserCode] = useState<string | undefined>("");
+  const [buttonDesc, setButtonDesc] = useState<string>("");
+  const getUserCode = (className: string) => {
     // Select all div elements with the class 'view-line'
     const viewLineDivs = document.querySelectorAll(`div.${className}`);
 
@@ -39,7 +26,7 @@ function App() {
     });
 
     return spansContent; // Return the array of spans content
-  }
+  };
 
   // Function to send the message to the background script
   const getCurrentUrl = (): void => {
@@ -92,12 +79,13 @@ function App() {
         return chrome.scripting.executeScript({
           target: { tabId: activeTabId },
           // injectImmediately: true,  // uncomment this to make it execute straight away, other wise it will wait for document_idle
-          func: DOMtoString,
+          func: getUserCode,
           args: ["view-line"], // you can use this to target what element to get the html for
         });
       })
       .then(function (results) {
         console.log("results", results ? results[0].result?.join("\n") : []);
+        setUserCode(results ? results[0].result?.join("\n") : "");
       })
       .catch(function (error) {
         console.log(error);
@@ -139,7 +127,10 @@ function App() {
           <Chat chat={chat} loading={loading} />
 
           {!error && (
-            <>
+            <div className="flex flex-col gap-2">
+              <div className="h-4">
+                <p>{buttonDesc}</p>
+              </div>
               <div className="flex justify-around gap-2">
                 <HelpButton
                   title="Data Structure"
@@ -156,13 +147,14 @@ function App() {
                         2. Time complexity explanation: Format the time complexity in <li> tags."
                   loading={loading}
                   setLoading={setLoading}
+                  setButtonDesc={setButtonDesc}
                 />
                 <HelpButton
                   title="Step-by-Step"
                   setChat={setChat}
                   problem={currentProblem}
                   chat={chat}
-                  message="Walk through a step-by-step thought process in plain English"
+                  message="Walk through a step-by-step process in plain English"
                   hint="walk me through step by step how to solve this and respond like 
                         you're talking to the person one on one. Only use one sentence explanations, and only explain the logic without any code examples.
                         Use HTML tags like <ul>, <li>, 
@@ -174,13 +166,22 @@ function App() {
                            - One sentence explanation.
                         make sure ITS NUMBERED "
                   loading={loading}
+                  setButtonDesc={setButtonDesc}
                   setLoading={setLoading}
                 />
-                <button className="text-md bg-gray-500 hover:bg-gray-600 p-2 rounded-lg cursor-pointer">
-                  <p className="text-md font-semibold text-nowrap">
-                    Edge Cases
-                  </p>
-                </button>
+                <HelpButton
+                  title="Analyze My Code"
+                  setChat={setChat}
+                  problem={currentProblem}
+                  chat={chat}
+                  message="Can you analyze my code and explain where I need to go?"
+                  hint={`this is my code ${
+                    userCode ? userCode : ""
+                  }, can you give me hints on what I'm doing wrong, or where I could go from here`}
+                  loading={loading}
+                  setLoading={setLoading}
+                  setButtonDesc={setButtonDesc}
+                />
               </div>
               <AiInput
                 chat={chat}
@@ -189,14 +190,8 @@ function App() {
                 loading={loading}
                 setLoading={setLoading}
               />
-            </>
+            </div>
           )}
-        </div>
-        <div className="p-4">
-          <h1 className="text-xl font-bold">Page Content</h1>
-          <pre className="whitespace-pre-wrap">
-            {pageContent || "No content yet."}
-          </pre>
         </div>
       </div>
     </>

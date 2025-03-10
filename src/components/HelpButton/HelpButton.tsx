@@ -11,6 +11,7 @@ type Props = {
   message: string;
   loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
+  setButtonDesc: Dispatch<SetStateAction<string>>;
 };
 
 const HelpButton = ({
@@ -22,6 +23,7 @@ const HelpButton = ({
   message,
   loading,
   setLoading,
+  setButtonDesc,
 }: Props) => {
   const prompt = `"Given the LeetCode problem ${problem}, 
   ${hint}
@@ -45,6 +47,8 @@ const HelpButton = ({
       className="text-md bg-gray-500 hover:bg-gray-600 p-2 rounded-lg cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
       disabled={loading}
       onClick={askAI}
+      onMouseEnter={() => setButtonDesc(message)}
+      onMouseLeave={() => setButtonDesc("")}
     >
       <p className="text-md font-semibold text-nowrap">{title}</p>
     </button>
