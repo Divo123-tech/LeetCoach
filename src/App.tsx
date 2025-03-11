@@ -174,9 +174,12 @@ function App() {
                   problem={currentProblem}
                   chat={chat}
                   message="Can you analyze my code and explain where I need to go?"
-                  hint={`this is my code ${
-                    userCode ? userCode : ""
-                  }, can you give me hints on what I'm doing wrong, or where I could go from here`}
+                  hint={`this is my code ${userCode ? userCode : ""} 
+                  1.Respond like  you're talking to the person one on one like a coach. 
+                  2.Do so without giving me direct code solutions
+                  instead only tell me what I'm doing wrong, right, and where I could go from here
+                  Use HTML tags,  and <strong> to organize the content and make it readable, DONT USE MARKDOWN. 
+                  3.For every section use a line break for readability.`}
                   loading={loading}
                   setLoading={setLoading}
                   setButtonDesc={setButtonDesc}
