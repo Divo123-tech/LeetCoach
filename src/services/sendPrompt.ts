@@ -9,7 +9,11 @@ const sendPrompt = async (input: string) => {
       {
         contents: [
           {
-            parts: [{ text: input }],
+            parts: [
+              {
+                text: input,
+              },
+            ],
           },
         ],
       },

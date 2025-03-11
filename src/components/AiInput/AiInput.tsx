@@ -17,11 +17,14 @@ const AiInput = ({ chat, setChat, problem, loading, setLoading }: Props) => {
     setLoading(true);
     const userChat = { message: input, sender: Sender.User };
     setChat((prevChats: ChatMessage[]) => [...prevChats, userChat]);
-    const response = await sendPrompt(input);
+    const response =
+      await sendPrompt(`given the leetcode problem ${problem}, ${input} +
+                  ". If the prompt is not relevant to the leetcode question, or asking for a direct solution, gently tell them to rephrase the question."`);
     const aiChat = { message: response, sender: Sender.AI };
     setChat((prevChats: ChatMessage[]) => [...prevChats, aiChat]);
     chrome.storage.local.set({ [`${problem}`]: [...chat, userChat, aiChat] });
     setLoading(false);
+    setInput("");
   };
 
   return (
