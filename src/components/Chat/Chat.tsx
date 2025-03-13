@@ -1,12 +1,12 @@
 import { ChatMessage, Sender } from "../../types";
-
+import Logo from "../../assets/Logo.png";
 type Props = {
   chat: ChatMessage[];
   loading: boolean;
 };
 const Chat = ({ chat, loading }: Props) => {
   return (
-    <div className="space-y-4 p-4 max-h-[250px] overflow-y-auto">
+    <div className="space-y-4  max-h-[250px] overflow-y-auto">
       {chat.map((chatMessage: ChatMessage, index) => (
         <div
           key={index}
@@ -16,8 +16,13 @@ const Chat = ({ chat, loading }: Props) => {
         >
           {chatMessage.sender === Sender.AI ? (
             // AI Message (Full width, no bubble)
-            <div className="w-full text-left text-white">
-              <p dangerouslySetInnerHTML={{ __html: chatMessage.message }}></p>
+            <div className="flex gap-2">
+              <img src={Logo} className="w-8 h-8 rounded-full"></img>
+              <div className="w-full text-left text-white px-2">
+                <p
+                  dangerouslySetInnerHTML={{ __html: chatMessage.message }}
+                ></p>
+              </div>
             </div>
           ) : (
             // User Message (Bubble, right-aligned)

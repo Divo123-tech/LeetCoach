@@ -31,7 +31,7 @@ const AiInput = ({ chat, setChat, problem, loading, setLoading }: Props) => {
     <div>
       <textarea
         className="w-full p-2 border rounded disabled:cursor-not-allowed"
-        placeholder="Enter prompt..."
+        placeholder="Ask LeetCoach for help..."
         disabled={loading}
         value={input}
         onChange={(e) => setInput(e.target.value)}
