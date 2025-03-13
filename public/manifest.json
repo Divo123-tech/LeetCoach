@@ -5,7 +5,7 @@
   "permissions": ["storage", "tabs", "activeTab", "scripting"],
   "action": {
     "default_popup": "popup.html",
-    "default_icon": "icon.png"
+    "default_icon": "Logo.png"
   },
   "background": {
     "service_worker": "assets/background-D8e0SWlQ.js"

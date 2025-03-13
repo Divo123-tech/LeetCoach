@@ -4,6 +4,7 @@ import AiInput from "./components/AiInput";
 import { ChatMessage } from "./types";
 import HelpButton from "./components/HelpButton/HelpButton";
 import Chat from "./components/Chat";
+import Logo from "./assets/Logo.png";
 function App() {
   const [currentProblem, setCurrentProblem] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
@@ -185,6 +186,15 @@ function App() {
                   setButtonDesc={setButtonDesc}
                 />
               </div>
+              <div className="flex items-center gap-4 py-2">
+                <img src={Logo} className="w-12 rounded-full"></img>
+                <p className="text-left">
+                  <span className="font-bold">Struggling? </span>
+                  I, Leet Coach, will do my best to help! Remember the best way
+                  to get better is to work through the problem!
+                </p>
+              </div>
+
               <AiInput
                 chat={chat}
                 setChat={setChat}
